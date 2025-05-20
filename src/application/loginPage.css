@@ -1,0 +1,27 @@
+.root {
+	-fx-background-image: url("/bg/loginscreen.png");
+	-fx-background-size: cover;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center center;
+}
+.text-field {
+  -fx-background-color: #E0C097; 
+  -fx-prompt-text-fill: #FFD700; 
+  -fx-border-color: #2E8B57;    
+  -fx-border-width: 2;
+}
+.text-field:focused {
+  -fx-border-color: #2E8B57;     
+  -fx-effect: dropshadow(gaussian, #2E8B57, 5, 0, 0, 0);
+}
+.button {
+  -fx-background-color: #E97451; 
+  -fx-text-fill: #FFFFFF;       
+  -fx-background-radius: 4;      
+}
+.button:hover {
+  -fx-background-color: derive(#E97451, -10%);
+}
+.label {
+  -fx-text-fill: #FFD700;       
+}

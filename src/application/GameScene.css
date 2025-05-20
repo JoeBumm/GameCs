@@ -1,0 +1,89 @@
+.root {
+	-fx-background-image: url("/bg/BackgroundGameMainScene.png");
+	-fx-background-size: cover;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center center;
+}
+.text-field {
+  -fx-background-color: #E0C097; 
+  -fx-prompt-text-fill: #FFD700; 
+  -fx-border-color: #2E8B57;    
+  -fx-border-width: 2;
+}
+
+.fx.
+
+
+
+.button {
+  -fx-background-color: #E97451; 
+  -fx-text-fill: #FFFFFF;       
+  -fx-background-radius: 4;      
+}
+.button:hover {
+  -fx-background-color: derive(#E97451, -10%);
+      -fx-effect: dropshadow(
+        gaussian,
+        rgba(255, 220, 180, 0.6),
+        8,    /* radius */
+        0.2,  /* spread */
+        0, 2
+    );
+}
+.label {
+  -fx-text-fill: #FFD700;
+        
+}
+
+.label.highlight {
+  /* brighter, more opaque background: pure yellow at 80% opacity */
+  -fx-background-color: rgba(255,255,0,0.8);
+
+  /* a matching yellow border */
+  -fx-border-color: #FFFF00;
+  -fx-border-width: 2px;
+
+  /* stronger, wider glow */
+  -fx-effect:
+    dropshadow( one-pass-box,   #FFFF00,  4, 0.0, 0, 0 ),  /* tighter stroke */
+    dropshadow( three-pass-box, #FFFF00, 20, 0.0, 0, 0 );  /* big soft glow */
+}
+/* card-description style */
+.card-description {
+    /* Text styling */
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 10pt;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFD700;           /* Gold text */
+
+    /* Background + border */
+    -fx-background-color: rgba(0, 0, 0, 0.6);
+    -fx-background-radius: 8;
+    -fx-padding: 10 15 10 15;
+    -fx-border-color: #FFA500;        /* Orange border */
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 5px 15px 10px 15px;
+    /* Drop shadow glow */
+    -fx-effect: dropshadow(gaussian,rgba(255, 200, 80, 0.6),15, 0.2,0, 0);
+}
+
+/* Hover effect to make it pop */
+.card-description:hover {
+    -fx-text-fill: white;
+    -fx-background-color: rgba(255, 215, 0, 0.9);
+    -fx-effect: dropshadow( gaussian , rgba(255,215,0,1.0) , 30, 0.5, 0, 0 );
+    -fx-cursor: hand;
+}
+
+
+.card {
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.5, 0, 0);
+    -fx-transition: all 0.3s;
+}
+
+ 
+.card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0.7, 0, 0);
+}

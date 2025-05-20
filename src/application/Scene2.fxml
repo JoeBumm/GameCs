@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="200.0" minWidth="400.0" stylesheets="@GameScene.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Scene2Controller">
+   <children>
+      <Pane fx:id="cardDropPane" prefHeight="91.0" prefWidth="70.0" />
+      <BorderPane prefHeight="800.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         
+         <!-- MARBLE BOARD AREA (MODIFIED) -->
+         <center>
+            <StackPane fx:id="boardStack" prefHeight="454.0" prefWidth="454.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="512.0" fitWidth="512.0">
+                     <image>
+                        <Image url="@../../recources/bg/Untitled%20design%20(10)%20(1).png" />
+                     </image>
+                  </ImageView>
+                  <Group>
+                     <children>
+    <!-- All 100 circles with sequential marble_x IDs -->
+    <Circle fx:id="marble_1" fill="#3e3e3e" layoutX="223.0" layoutY="469.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_2" fill="#3e3e3e" layoutX="223.0" layoutY="453.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_3" fill="#3e3e3e" layoutX="223.0" layoutY="434.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_4" fill="#3e3e3e" layoutX="223.0" layoutY="418.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_5" fill="#3e3e3e" layoutX="223.0" layoutY="402.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_6" fill="#3e3e3e" layoutX="223.0" layoutY="385.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_7" fill="#3e3e3e" layoutX="223.0" layoutY="365.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_8" fill="#3e3e3e" layoutX="223.0" layoutY="348.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_9" fill="#3e3e3e" layoutX="200.0" layoutY="334.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_10" fill="#3e3e3e" layoutX="188.0" layoutY="354.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_11" fill="#3e3e3e" layoutX="168.0" layoutY="359.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_12" fill="#3e3e3e" layoutX="149.0" layoutY="346.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_13" fill="#3e3e3e" layoutX="154.0" layoutY="326.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_14" fill="#3e3e3e" layoutX="166.0" layoutY="311.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_15" fill="#3e3e3e" layoutX="149.0" layoutY="294.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_16" fill="#3e3e3e" layoutX="134.0" layoutY="294.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_17" fill="#3e3e3e" layoutX="117.0" layoutY="294.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_18" fill="#3e3e3e" layoutX="103.0" layoutY="294.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_19" fill="#3e3e3e" layoutX="84.0" layoutY="295.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_20" fill="#3e3e3e" layoutX="69.0" layoutY="294.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_21" fill="#3e3e3e" layoutX="52.0" layoutY="294.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_22" fill="#3e3e3e" layoutX="35.0" layoutY="294.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_23" fill="#3e3e3e" layoutX="35.0" layoutY="277.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_24" fill="#3e3e3e" layoutX="39.0" layoutY="260.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_25" fill="#3e3e3e" layoutX="36.0" layoutY="244.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_26" fill="#3e3e3e" layoutX="36.0" layoutY="226.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_27" fill="#3e3e3e" layoutX="52.0" layoutY="226.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_28" fill="#3e3e3e" layoutX="69.0" layoutY="225.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_29" fill="#3e3e3e" layoutX="84.0" layoutY="225.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_30" fill="#3e3e3e" layoutX="99.0" layoutY="227.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_31" fill="#3e3e3e" layoutX="115.0" layoutY="227.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_32" fill="#3e3e3e" layoutX="131.0" layoutY="227.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_33" fill="#3e3e3e" layoutX="147.0" layoutY="227.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_34" fill="#3e3e3e" layoutX="162.0" layoutY="213.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_35" fill="#3e3e3e" layoutX="153.0" layoutY="193.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_36" fill="#3e3e3e" layoutX="141.0" layoutY="177.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_37" fill="#3e3e3e" layoutX="156.0" layoutY="157.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_38" fill="#3e3e3e" layoutX="180.0" layoutY="163.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_39" fill="#3e3e3e" layoutX="197.0" layoutY="175.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_40" fill="#3e3e3e" layoutX="223.0" layoutY="167.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_41" fill="#3e3e3e" layoutX="229.0" layoutY="146.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_42" fill="#3e3e3e" layoutX="226.0" layoutY="129.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_43" fill="#3e3e3e" layoutX="225.0" layoutY="110.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_44" fill="#3e3e3e" layoutX="225.0" layoutY="94.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_45" fill="#3e3e3e" layoutX="226.0" layoutY="75.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_46" fill="#3e3e3e" layoutX="224.0" layoutY="58.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_47" fill="#3e3e3e" layoutX="226.0" layoutY="41.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_51" fill="#3e3e3e" layoutX="293.0" layoutY="42.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_50" fill="#3e3e3e" layoutX="277.0" layoutY="42.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_49" fill="#3e3e3e" layoutX="260.0" layoutY="42.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_48" fill="#3e3e3e" layoutX="243.0" layoutY="42.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_57" fill="#3e3e3e" layoutX="293.0" layoutY="147.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_56" fill="#3e3e3e" layoutX="293.0" layoutY="128.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_55" fill="#3e3e3e" layoutX="293.0" layoutY="111.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_54" fill="#3e3e3e" layoutX="293.0" layoutY="94.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_53" fill="#3e3e3e" layoutX="293.0" layoutY="77.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_52" fill="#3e3e3e" layoutX="293.0" layoutY="61.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_58" fill="#3e3e3e" layoutX="293.0" layoutY="164.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_59" fill="#3e3e3e" layoutX="316.0" layoutY="178.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_60" fill="#3e3e3e" layoutX="328.0" layoutY="158.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_61" fill="#3e3e3e" layoutX="348.0" layoutY="152.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_62" fill="#3e3e3e" layoutX="368.0" layoutY="165.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_63" fill="#3e3e3e" layoutX="361.0" layoutY="185.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_64" fill="#3e3e3e" layoutX="349.0" layoutY="201.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_65" fill="#3e3e3e" layoutX="368.0" layoutY="218.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_66" fill="#3e3e3e" layoutX="383.0" layoutY="218.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_67" fill="#3e3e3e" layoutX="399.0" layoutY="218.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_68" fill="#3e3e3e" layoutX="413.0" layoutY="218.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_69" fill="#3e3e3e" layoutX="432.0" layoutY="215.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_70" fill="#3e3e3e" layoutX="447.0" layoutY="218.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_71" fill="#3e3e3e" layoutX="464.0" layoutY="218.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_72" fill="#3e3e3e" layoutX="480.0" layoutY="218.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_73" fill="#3e3e3e" layoutX="480.0" layoutY="235.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_74" fill="#3e3e3e" layoutX="477.0" layoutY="252.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_75" fill="#3e3e3e" layoutX="480.0" layoutY="268.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_76" fill="#3e3e3e" layoutX="480.0" layoutY="285.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_84" fill="#3e3e3e" layoutX="354.0" layoutY="299.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_83" fill="#3e3e3e" layoutX="369.0" layoutY="285.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_82" fill="#3e3e3e" layoutX="385.0" layoutY="285.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_81" fill="#3e3e3e" layoutX="401.0" layoutY="285.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_80" fill="#3e3e3e" layoutX="417.0" layoutY="285.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_79" fill="#3e3e3e" layoutX="432.0" layoutY="287.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_78" fill="#3e3e3e" layoutX="447.0" layoutY="288.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_77" fill="#3e3e3e" layoutX="464.0" layoutY="286.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_97" fill="#3e3e3e" layoutX="290.0" layoutY="470.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_96" fill="#3e3e3e" layoutX="291.0" layoutY="454.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_95" fill="#3e3e3e" layoutX="290.0" layoutY="437.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_94" fill="#3e3e3e" layoutX="292.0" layoutY="418.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_93" fill="#3e3e3e" layoutX="291.0" layoutY="401.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_92" fill="#3e3e3e" layoutX="290.0" layoutY="383.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_91" fill="#3e3e3e" layoutX="287.0" layoutY="365.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_90" fill="#3e3e3e" layoutX="293.0" layoutY="346.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_89" fill="#3e3e3e" layoutX="319.0" layoutY="336.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_88" fill="#3e3e3e" layoutX="336.0" layoutY="348.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_87" fill="#3e3e3e" layoutX="359.0" layoutY="354.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_86" fill="#3e3e3e" layoutX="374.0" layoutY="334.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_85" fill="#3e3e3e" layoutX="363.0" layoutY="318.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_100" fill="#3e3e3e" layoutX="240.0" layoutY="469.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+    <Circle fx:id="marble_99" fill="#3e3e3e" layoutX="258.0" layoutY="469.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="marble_98" fill="#3e3e3e" layoutX="273.0" layoutY="469.0" radius="6.5" stroke="BLACK" strokeType="INSIDE" />
+                     </children>
+                  </Group>
+               </children>
+               
+                         <Group>
+                     <children>
+ <!-- Player 2 (Top-Left) --> 
+        <Circle fx:id="player2Marble1" layoutX="67.0" layoutY="60.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player2Marble2" layoutX="89.0" layoutY="60.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player2Marble3" layoutX="67.0" layoutY="80.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player2Marble4" layoutX="89.0" layoutY="80.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+
+        <!-- Player 3 (Top-Right) -->
+        <Circle fx:id="player3Marble2" layoutX="448.0" layoutY="60.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player3Marble1" layoutX="426.0" layoutY="60.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player3Marble3" layoutX="427.0" layoutY="79.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player3Marble4" layoutX="448.0" layoutY="79.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+
+        <!-- Player 1 (Bottom-Left) -->
+        <Circle fx:id="player1Marble3" layoutX="72.0" layoutY="474.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player1Marble4" layoutX="96.0" layoutY="474.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player1Marble1" layoutX="72.0" layoutY="494.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player1Marble2" layoutX="96.0" layoutY="494.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+<!-- Player 0 (Bottom-Right) -->
+        <Circle fx:id="player0Marble1" layoutX="421.0" layoutY="474.0" onMouseClicked="#selectMarble" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player0Marble2" layoutX="445.0" layoutY="474.0" onMouseClicked="#selectMarble" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player0Marble3" layoutX="422.0" layoutY="494.0" onMouseClicked="#selectMarble" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+        <Circle fx:id="player0Marble4" layoutX="445.0" layoutY="494.0" onMouseClicked="#selectMarble" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+                        <Pane fx:id="cardDropPane" layoutX="248.0" layoutY="235.0" prefHeight="91.0" prefWidth="70.0" />
+
+                     </children>
+                  </Group>
+            </StackPane>
+         </center>
+         <top>
+            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="172.0" fitWidth="275.0">
+                     <image>
+                        <Image url="@../../recources/cards/collection/Untitled%20design%20(8)%20(1).png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="Cpu2Name" text="CPU 2">
+                     <HBox.margin>
+                        <Insets left="50.0" top="50.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </top>
+         <left>
+            <HBox maxHeight="100.0" maxWidth="200.0" prefHeight="100.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="Cpu1Name" minHeight="100.0" minWidth="-Infinity" prefHeight="100.0" prefWidth="100.0" rotate="90.0" text="CPU1">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="30.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ImageView fitHeight="172.0" fitWidth="305.0" rotate="90.0">
+                     <image>
+                        <Image url="@../../recources/cards/collection/Untitled%20design%20(4)%20(1).png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="-90.0" />
+                     </HBox.margin>
+                  </ImageView>
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </HBox>
+         </left>
+         <right>
+            <HBox maxHeight="100.0" maxWidth="200.0" prefHeight="100.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="172.0" fitWidth="305.0" rotate="270.0">
+                     <image>
+                        <Image url="@../../recources/cards/collection/Untitled%20design%20(7)%20(1).png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="-90.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="Cpu3Name" minHeight="100.0" minWidth="100.0" rotate="270.0" text="CPU3">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="-10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <BorderPane.margin>
+                  <Insets top="50.0" />
+               </BorderPane.margin>
+            </HBox>
+         </right>
+         <bottom>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
+               <Pane fx:id="cardDescriptionZone" maxHeight="50.0" minWidth="300.0" prefHeight="150.0" prefWidth="247.0">
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+               </Pane>
+               <ImageView fx:id="CardPlayer1" fitHeight="150.0" fitWidth="150.0" onMouseClicked="#cardSelected1" styleClass="card">
+                  <image>
+                     <Image url="@../../recources/cards/backcards/SingleCardTpBackground.png" />
+                  </image>
+               </ImageView>
+               <ImageView fx:id="CardPlayer2" fitHeight="150.0" fitWidth="150.0" onMouseClicked="#cardSelected2" styleClass="card">
+                  <image>
+                     <Image url="@../../recources/cards/backcards/SingleCardTpBackground.png" />
+                  </image>
+               </ImageView>
+               <ImageView fx:id="CardPlayer3" fitHeight="150.0" fitWidth="150.0" onMouseClicked="#cardSelected3" styleClass="card">
+                  <image>
+                     <Image url="@../../recources/cards/backcards/SingleCardTpBackground.png" />
+                  </image>
+               </ImageView>
+               <ImageView fx:id="CardPlayer4" fitHeight="150.0" fitWidth="150.0" onMouseClicked="#cardSelected4" styleClass="card">
+                  <image>
+                     <Image url="@../../recources/cards/backcards/SingleCardTpBackground.png" />
+                  </image>
+               </ImageView>
+               <VBox alignment="CENTER" maxWidth="200.0" prefHeight="200.0" prefWidth="100.0">
+                  <children>
+                     <Button fx:id="playBtn" mnemonicParsing="false" onMouseClicked="#PlayCardSelected" text="Play Turn" visible="false">
+                        <VBox.margin>
+                           <Insets />
+                        </VBox.margin>
+                     </Button>
+                     <Label fx:id="PlayerName" maxWidth="200.0" minWidth="100.0" prefHeight="35.0" prefWidth="124.0" text="Label" textAlignment="CENTER" wrapText="true">
+                        <font>
+                           <Font size="24.0" />
+                        </font>
+                        <VBox.margin>
+                           <Insets />
+                        </VBox.margin>
+                     </Label>
+                  </children>
+               </VBox>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>
