@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import engine.board.Board;
 import engine.board.Cell;
 import engine.board.SafeZone;
 import exception.GameException;
+import exception.IllegalDestroyException;
 import exception.IllegalMovementException;
 import exception.InvalidCardException;
 import exception.InvalidMarbleException;
@@ -86,12 +88,77 @@ public void initData(Game game) throws GameException , InterruptedException {
     LoadPlayerCardsimgs();
     initialize(); // Ensure marbles are initialized first
     intializeCellsBooleans();
+    displayPlayerCardCounts();
     }
 
-//public void startGameLoop() throws GameException , InterruptedException {
-//	 	System.out.println("The First turn started");
-//	    proceedToNextTurn();
+@FXML 
+private void testBtn(MouseEvent e) throws GameException, InterruptedException {
+	proceedToNextTurn();
+	Circle a7a = playerMarbles[0].get(1);
+	destroy(a7a);
+	System.out.println("Test button is clicked");
+}
+
+// Shiko
+//@FXML
+//private void PlayCardSelected(MouseEvent event) throws GameException {
+//    // 0) Figure out which slot was selected
+//	int slot = lastSelectedCard - 1;   // 0..3
+//	int i = 0;
+//	int subtractor = 0;
+//	Player me = game.getPlayers().get(0);
+//	while(i < slot) 
+//	{
+//		if(playedSlots[i] == true)
+//		{
+//			subtractor++;
+//		}
+//		i++;
+//	}
+//	int backEndSlot = slot - subtractor;
+//	System.out.print("You selected the card: " + me.getSelectedCard().getName());
+//	System.out.println("Back end slot" + backEndSlot);
+//
+//	Standard chosenCard = (Standard) me.getHand().get(backEndSlot);
+//	int rank = chosenCard.getRank();
+//
+//	// 2) Let the engine process the move
+//	applyCardEffect(0,rank);
+//
+//	// 3) Move the marble in the UI
+//	//moveForRank(0, rank);
+//
+//	// 4) Now safely update the UI for the played card
+//	playedSlots[slot] = true;
+//	ImageView[] ivs = { CardPlayer1, CardPlayer2, CardPlayer3, CardPlayer4 };
+//	ImageView usedIv = ivs[slot];
+//	usedIv.setScaleX(1.0);
+//	usedIv.setScaleY(1.0);
+//	usedIv.setDisable(true);
+//	addInFirePit();
+//	flipPlayedCardOver();
+//	resetPlayButton();
+//	lastSelectedCard = 0;
+//
+//	System.out.println("\nYou played a card with rank " + rank);
+//
+//	// 5) Delay before next turn
+//	PauseTransition pause = new PauseTransition(Duration.seconds(1));
+//	pause.setOnFinished(e -> {
+//	    try {
+//	        
+//	    } catch (GameException | InterruptedException ex) {
+//	        ex.printStackTrace();
+//	    }
+//	});
+//	pause.play();
 //}
+
+
+public void startGameLoop() throws GameException , InterruptedException {
+	 	System.out.println("The First turn started");
+	    proceedToNextTurn();
+}
 
 /** Decide whose turn it is, do their move, then schedule the next turn. 
  * @throws GameException 
@@ -174,8 +241,18 @@ private void cpuPlayAndAdvance(int cpuIndex) throws GameException {
     int marbleIndex = 0;  
     moveMarbleBySteps(cpuIndex, marbleIndex, rank);
 
+    Circle cpuMarble = playerMarbles[cpuIndex].get(marbleIndex);
+
+    // 5a) Seed its current position so moveMarbleBySteps treats
+    //     marble_25 as “position 0” for CPU 1, marble_50 for CPU 2, etc.
+    int offset = CPU_START_OFFSETS[cpuIndex];
+    marblePositions.put(cpuMarble, offset);
+
+    // 5b) Now call your unmodified moveMarbleBySteps().
+    moveMarbleBySteps(cpuIndex, marbleIndex, 0);    
+    
     // 6) Wait before continuing
-    PauseTransition pause = new PauseTransition(Duration.seconds(5));
+    PauseTransition pause = new PauseTransition(Duration.seconds(1));
     pause.setOnFinished(e -> {
         try {
             proceedToNextTurn(); // only proceed *after* the pause
@@ -183,8 +260,12 @@ private void cpuPlayAndAdvance(int cpuIndex) throws GameException {
             ex.printStackTrace();
         }
     });
+    
+    
     pause.play(); // this returns immediately, doesn’t block UI
 }                           
+
+private static final int[] CPU_START_OFFSETS = {0,   26,  51,  76 };
 
 private String imagePathForCard(Card c) {
     if (c instanceof Standard) {
@@ -215,7 +296,6 @@ private ImageView getCpuImageView(int cpuIndex) {
 
 
 private void showGameOver() {
-    // Implement game over display
 }
 
 @FXML
@@ -350,6 +430,13 @@ private void LoadPlayerCardsimgs() {
         iv.setPreserveRatio(true);
 }}
 
+private void displayPlayerCardCounts() {
+    Cpu1Name.setText(game.getPlayers().get(1).getName() + ": (" + game.getPlayers().get(1).getHand().size()+ ")");
+    Cpu2Name.setText(game.getPlayers().get(2).getName() + ": (" + game.getPlayers().get(2).getHand().size()+ ")");
+    Cpu3Name.setText(game.getPlayers().get(3).getName() + ": (" + game.getPlayers().get(3).getHand().size()+ ")");
+}
+
+
 private void initializeMarbles() {
     List<Player> players = game.getPlayers();
     
@@ -386,6 +473,37 @@ private void setMarbleColor(Colour colour, Circle... marbles) {
         marble.setStroke(Color.BLACK);
     }
 }
+
+
+private void destroy(Circle c) throws IllegalDestroyException {
+    String fxId = c.getId();
+
+    // Extract player number and marble number from fxId
+    int playerNumber = Character.getNumericValue(fxId.charAt(6));
+    int marbleNumber = Character.getNumericValue(fxId.charAt(13));
+    int marbleIndex = marbleNumber - 1;
+
+    // Look up the home‐zone circle by fx:id
+    String homeFxId = "homeP" + playerNumber + "M" + marbleNumber;
+    Node node = boardStack.lookup("#" + homeFxId);
+    if (!(node instanceof Circle)) {
+        throw new IllegalDestroyException("Home cell not found for " + fxId);
+    }
+    Circle targetCell = (Circle) node;
+
+    // Compute the center of targetCell in boardStack’s coords
+    Bounds tb = targetCell.getBoundsInLocal();
+    Point2D centerLocal = new Point2D(tb.getCenterX(), tb.getCenterY());
+    Point2D centerScene = targetCell.localToScene(centerLocal);
+    Point2D boardCoords = boardStack.sceneToLocal(centerScene);
+
+    // Move the marble back to its home‐zone
+    c.setLayoutX(boardCoords.getX());
+    c.setLayoutY(boardCoords.getY());
+    c.toFront();
+}
+
+
 
 @FXML
 private void selectMarble(MouseEvent e) throws InvalidMarbleException {
@@ -544,8 +662,8 @@ private void cardSelected1(MouseEvent event) throws InvalidCardException {
 
 
 @FXML
-private void PlayCardSelected(MouseEvent event) {
-    try {
+private void PlayCardSelected(MouseEvent event) throws GameException, InterruptedException {
+//    try {
         // 0) Figure out which slot was selected
         int slot = lastSelectedCard - 1;   // 0..3
 
@@ -555,10 +673,8 @@ private void PlayCardSelected(MouseEvent event) {
         int rank = chosenCard.getRank();
 
         // 2) Let the engine process the move
-        CardsPlayHandeler(rank);
-
-        // 3) Move the marble in the UI
-        moveForRank(0, rank);
+        applyCardEffect(0,rank);
+        game.endPlayerTurn();
 
         // 4) Now safely update the UI for the played card
         playedSlots[slot] = true;
@@ -575,264 +691,235 @@ private void PlayCardSelected(MouseEvent event) {
         System.out.println("\nYou played a card with rank " + rank);
 
         // 5) Delay before next turn
-        PauseTransition pause = new PauseTransition(Duration.seconds(5));
-        pause.setOnFinished(e -> {
-            try {
-                proceedToNextTurn();
-            } catch (GameException | InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        });
-        pause.play();
-
-    } catch (GameException ex) {
-        ex.printStackTrace();
-    }
+//        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+//        pause.setOnFinished(e -> {
+//            try {
+//                proceedToNextTurn();
+//            } catch (GameException | InterruptedException ex) {
+//                ex.printStackTrace();
+//            }
+//        });
+//        pause.play();
+//
+//    } catch (GameException ex) {
+//        ex.printStackTrace();
+//    }
 }
 
-private void CardsPlayHandeler(int rank) throws GameException {
-    if (rank == 2 || rank == 3 || rank == 5 || rank == 6 || rank == 8 || rank == 9) {
-        if (currentlyHighlighted != null) {
-            // find which player & which marble index was highlighted
-            for (int p = 0; p < playerMarbles.length; p++) {
-                List<Circle> list = playerMarbles[p];
-                int i = list.indexOf(currentlyHighlighted);
-                if (i >= 0) {
-                    // move that exact marble forward by `rank`
-                    moveMarbleBySteps(p, i, rank);
-                    game.playPlayerTurn();
-                    game.endPlayerTurn();
-                    return;
-                }
-            }
-        } else {
-            // no marble selected: show a warning or silently ignore
-        	game.endPlayerTurn();
-            System.out.println("Select a marble before playing a standard card.");
-            return;
-        }
-    }
-    // otherwise, special cards:
-    SpecialCardsHandeler(rank);	
-}
-
-private void moveForRank(int playerIndex, int rank) throws GameException {
-    if (Arrays.asList(2,3,5,6,8,9).contains(rank)) {
-        if (currentlyHighlighted != null) {
-            // find p,i of that Circle
-            for (int p = 0; p < playerMarbles.length; p++) {
-                int i = playerMarbles[p].indexOf(currentlyHighlighted);
-                if (i >= 0) {
-                    moveMarbleBySteps(p, i, rank);
-                    return;
-                }
-            }
-        }
+private void moveStandard(int playerIndex, int rank) throws GameException, InterruptedException {
+    if (currentlyHighlighted == null) {
+        System.out.println("Select a marble before playing a standard card.");   
         return;
     }
-
-    switch(rank) {
-      case 1:  // Ace
-        if (currentlyHighlighted != null) {
-          moveMarbleBySteps(0, playerMarbles[0].indexOf(currentlyHighlighted), 1);
-        } else {
-          moveMarbleNotOnBoard();
-        }
-        break;
-      case 4:  moveBackSelected(4); break;
-      case 10: moveForwardSelected(10); break;
-      case 11: handleEleven();             break;
-      case 13: moveKing();                 break;
-      case 12: moveForwardSelected(12);    break;
-      case 14: wildCardHandle(rank);           break;
-      case 15: wildCardHandle(rank);       break;
+    if(currentlyHighlighted != null) {
+    	game.playPlayerTurn();
+    	moveMarbleBySteps(playerIndex,0,rank);
+    	proceedToNextTurn();
     }
+    else
+    	System.err.println("Internal error: highlighted circle not in any player list.");
+    	game.endPlayerTurn();
+    	proceedToNextTurn();
 }
 
-private void moveKing() {
-	// TODO Auto-generated method stub
-	
-}
 
-private void handleEleven() {
-	// TODO Auto-generated method stub
-	
-}
 
-private void moveForwardSelected(int i) {
-	// TODO Auto-generated method stub
-	
-}
-
-private void moveBackSelected(int i) {
-	// TODO Auto-generated method stub
-	
-}
-
-private void moveMarbleNotOnBoard() { // To base cell
-    for (int i = 0; i < 4; i++) {
-        Circle marble = playerMarbles[0].get(i);
-        int currentPos = marblePositions.getOrDefault(marble, 0);
-        
-        // If marble is at home (position 0)
-        if (currentPos == 0) {
-            // Move it to the first board position (marble_1)
-            moveMarbleBySteps(0, i, 1);
-            return; // Exit after moving one marble
+/**
+ * Counts how many cards have already been played (true in playedSlots)
+ * before the given visual index.
+ */
+private int countPlayedBefore(int index) {
+    int count = 0;
+    for (int i = 0; i < index; i++) {
+        if (playedSlots[i]) {
+            count++;
         }
     }
+    return count;
+}
+
+//private void moveMarbleNotOnBoard() { // To base cell
+//    for (int i = 0; i < 4; i++) {
+//        Circle marble = playerMarbles[0].get(i);
+//        int currentPos = marblePositions.getOrDefault(marble, 0);
+//        
+//        // If marble is at home (position 0)
+//        if (currentPos == 0) {
+//            // Move it to the first board position (marble_1)
+//            moveMarbleBySteps(0, i, 1);
+//            return; // Exit after moving one marble
+//        }
+//    }
+//}
+
+private void applyCardEffect(int playerIndex, int rank) throws GameException, InterruptedException {
+    // 2) Now dispatch the correct movement or special effect:
+    switch (rank) {
+        case 1:
+            // Ace: advance or bring a marble out
+            Ace(playerIndex);
+            proceedToNextTurn();
+            System.out.print("This is a call after the next turn has triggered");
+            break;
+        case 4:
+            moveBack(playerIndex, -4);
+            proceedToNextTurn();
+            System.out.print("This is a call after the next turn has triggered");
+            break;
+        case 10:
+            Ten(playerIndex, 10);
+            proceedToNextTurn();
+            System.out.print("This is a call after the next turn has triggered");
+
+            break;
+        case 11:
+            Eleven(playerIndex);
+            proceedToNextTurn();
+            System.out.print("This is a call after the next turn has triggered");
+            break;
+        case 12:
+            Queen(playerIndex);
+            proceedToNextTurn();
+            System.out.print("This is a call after the next turn has triggered");
+            break;
+        case 13:
+            king(playerIndex);
+            proceedToNextTurn();
+            System.out.print("This is a call after the next turn has triggered");
+            break;
+        case 14:
+        case 15:
+        	wildCardHandle(playerIndex, rank);
+            System.out.print("This is a call after the next turn has triggered");
+        	proceedToNextTurn();
+            break;
+        default:
+           // standard 2,3,5,6,8,9;
+            moveStandard(playerIndex, rank);
+            proceedToNextTurn();
+            break;
+    }
 }
 
 
-private void SpecialCardsHandeler(int rank) throws GameException {
-	Player me = game.getPlayers().get(0);
-   
-	if (rank == 1) { // Ace
-	    if (currentlyHighlighted != null) {
-	    	moveMarbleBySteps(0,0,1);
-	    	game.playPlayerTurn();
-            game.endPlayerTurn();
-	    }
-	    else
-	    	moveMarbleNotOnBoard();
-	        game.playPlayerTurn();
-	        game.endPlayerTurn();
-    }
-    // King
-	
-	else if (rank == 13) { // King
-	    if (currentlyHighlighted != null) {
-	    	moveMarbleBySteps(0,0,13);
-	    	// Destroy marbles in path
-	    	game.playPlayerTurn();
-	    	game.endPlayerTurn();
-	    }
-	    else
-	    	moveMarbleNotOnBoard();
-	        game.playPlayerTurn();
-	        game.fieldMarble();
-	        game.endPlayerTurn();
-	}
-	
-	// Four
-	
-	else if (rank ==4) {
-		if(currentlyHighlighted != null) {
-			moveMarbleBySteps(0,0,-4);	
-			game.playPlayerTurn();
-			game.endPlayerTurn();
-		}
-	}
-	
-	// Five: Moves any marble (yours or opponent's) forward 5 steps
-	
-	else if(rank==5) {
-        if (currentlyHighlighted != null) {
-            // find which player & which index
-            for (int p = 0; p < playerMarbles.length; p++) {
-                List<Circle> list = playerMarbles[p];
-                int idx = list.indexOf(currentlyHighlighted);
-                if (idx >= 0) {
-                    // bingo! move that one
-                    // first tell the engine
-                    Marble modelMarble = game.getPlayers().get(p).getMarbles().get(idx);
-                    game.playPlayerTurn();
-                    game.endPlayerTurn();
-                    // then update the UI
-                    moveMarbleBySteps(p, idx, 5);
-                    
-                    // end the search
-                    break;
-                }
-	}}
-	
-	// seven: to be implemented
-	
-	else if(rank==7) {
-		
-	}
-	
-	// Ten: Discard random card from next player + skip turn OR<br>• Standard 10-step move 
-	// Here you need to display that the player got discarded
-	else if(rank==10) {
-	    if (currentlyHighlighted != null) {
-	    	moveMarbleBySteps(0,0,12);
-	    	game.playPlayerTurn();
-	    	game.endPlayerTurn();
-	    }
-	    else
-	    	game.playPlayerTurn();//gui indication is missing
-	        game.endPlayerTurn();
-	}
-        
-    // eleven Swap positions with any marble OR<br>• Standard 11-step move |
-	else if (rank == 11) {
-	    // 1) If they’ve already highlighted one marble and now click a second, do a swap
-	    if (firstSwapCandidate != null && currentlyHighlighted != null 
-	        && currentlyHighlighted != firstSwapCandidate) {
-	        
-	        // Find model marbles
-	        Marble m1 = findModelMarbleForCircle(firstSwapCandidate);
-	        Marble m2 = findModelMarbleForCircle(currentlyHighlighted);
-	        // Swap them in the engine
-	        game.playPlayerTurn();;
-	        game.endPlayerTurn();
-	        
-	        // Swap their UI positions & tracking
-	        swapCirclePositions(firstSwapCandidate, currentlyHighlighted);
 
-	        // Cleanup
-	        firstSwapCandidate.setStroke(Color.BLACK);
-	        firstSwapCandidate.setStrokeWidth(1);
-	        firstSwapCandidate = null;
-	        currentlyHighlighted = null;
-	        game.playPlayerTurn();
-	        game.endPlayerTurn();
-	    }
-	    // 2) If no first candidate yet but they clicked one, mark it
-	    else if (currentlyHighlighted != null && firstSwapCandidate == null) {
-	        firstSwapCandidate = currentlyHighlighted;
-	        firstSwapCandidate.setStroke(Color.ORANGE);
-	        firstSwapCandidate.setStrokeWidth(4);
-	        // wait for second click…
-	    }
-	    // 3) No swap: standard 11-step move if they click once and then hit Play
-	    else if (currentlyHighlighted != null && firstSwapCandidate == null) {
-	        // find which player/index
-	        for (int p = 0; p < playerMarbles.length; p++) {
-	            int idx = playerMarbles[p].indexOf(currentlyHighlighted);
-	            if (idx >= 0) {
-	                // move in engine & UI
-	                Marble m = game.getPlayers().get(p).getMarbles().get(idx);
-	                game.playPlayerTurn();
-	                moveMarbleBySteps(p, idx, 11);
-	                break;
-	            }
-	        }
-	        game.playPlayerTurn();
-	    }
-	    else {
-	        // nothing selected yet
-	        System.out.println("Click one marble to move 11, or two to swap.");
-	    }
-	}
-       
+
+private void Ace(int playerIndex) throws GameException{
+    if (currentlyHighlighted != null) {
+    	moveMarbleBySteps(playerIndex,0,1);
+    	game.playPlayerTurn();
+        game.endPlayerTurn();
+    }
+    else
+    	moveMarbleBySteps(playerIndex,0,1);
+        game.playPlayerTurn();
+        game.endPlayerTurn();
+}
+
+public void moveBack(int playerIndex, int steps) throws GameException {
+    if (currentlyHighlighted != null) {
+    	moveMarbleBySteps(playerIndex,0,steps);
+    	game.playPlayerTurn();
+        game.endPlayerTurn();}
+    return;
+}
+
+public void Ten(int playerIndex, int steps) throws GameException {
+    if (currentlyHighlighted != null) {
+    	moveMarbleBySteps(playerIndex,0,10);
+    	game.playPlayerTurn();
+        game.endPlayerTurn();}
+    else {
+    	game.playPlayerTurn(); // gui indication is missing: Seif Hy3mlo
+        game.endPlayerTurn();
+    }
+}
+
+private void Eleven(int playerIndex) throws GameException {
+	 // 1) If they’ve already highlighted one marble and now click a second, do a swap
+    if (firstSwapCandidate != null && currentlyHighlighted != null 
+        && currentlyHighlighted != firstSwapCandidate) {
+        
+        // Find model marbles
+        Marble m1 = findModelMarbleForCircle(firstSwapCandidate);
+        Marble m2 = findModelMarbleForCircle(currentlyHighlighted);
+        // Swap them in the engine
+        game.playPlayerTurn();;
+        game.endPlayerTurn();
+        
+        // Swap their UI positions & tracking
+        swapCirclePositions(firstSwapCandidate, currentlyHighlighted);
+
+        // Cleanup
+        firstSwapCandidate.setStroke(Color.BLACK);
+        firstSwapCandidate.setStrokeWidth(1);
+        firstSwapCandidate = null;
+        currentlyHighlighted = null;
+        game.playPlayerTurn();
+        game.endPlayerTurn();
+    }
+    // 2) If no first candidate yet but they clicked one, mark it
+    else if (currentlyHighlighted != null && firstSwapCandidate == null) {
+        firstSwapCandidate = currentlyHighlighted;
+        firstSwapCandidate.setStroke(Color.ORANGE);
+        firstSwapCandidate.setStrokeWidth(4);
+        // wait for second click…
+    }
+    // 3) No swap: standard 11-step move if they click once and then hit Play
+    else if (currentlyHighlighted != null && firstSwapCandidate == null) {
+        // find which player/index
+        for (int p = 0; p < playerMarbles.length; p++) {
+            int idx = playerMarbles[p].indexOf(currentlyHighlighted);
+            if (idx >= 0) {
+                // move in engine & UI
+                Marble m = game.getPlayers().get(p).getMarbles().get(idx);
+                game.playPlayerTurn();
+                moveMarbleBySteps(p, idx, 11);
+                break;
+            }
+        }
+        game.playPlayerTurn();
+    }
+    else {
+        // nothing selected yet
+        System.out.println("Click one marble to move 11, or two to swap.");
+    }
+}
+
+public void Twelve(int playerIndex) throws GameException {
     // Queen:  Discard random card from random player + skip turn OR<br>• Standard 12-step move |
-	else if(rank==12) {
-		game.playPlayerTurn();
-	}
-        
-        
-	else if(rank==14 || rank == 15) {
-		wildCardHandle(rank);
-	}
-	
-}}
+	game.playPlayerTurn();
+	game.endPlayerTurn();
+}
 
+public void Queen(int playerIndex) throws GameException {
+    if (currentlyHighlighted != null) {
+    	moveMarbleBySteps(playerIndex,0,12);
+    	game.playPlayerTurn(); 
+        game.endPlayerTurn();}
+    else {
+    	game.playPlayerTurn(); // gui indication is missing: Seif Hy3mlo
+        game.endPlayerTurn();
+    }
+}
 
-private void wildCardHandle(int rank) throws GameException {
-	if(rank ==14) { //  Send opponent's marble back to their Home Zone |
+public void king(int playerIndex) throws GameException {
+	//Field marble from Home Zone OR<br>• Move 13 steps (destroys marbles in path, ignores movement restrictions) |
+    if (currentlyHighlighted != null) {
+    	moveMarbleBySteps(playerIndex,0,13);
+    	game.playPlayerTurn(); 
+        game.endPlayerTurn();}
+    else {
+    	// hena destroy marble logic
+    }
+}
+
+private void wildCardHandle(int playerindex, int rank) throws GameException {
+	if(rank==14) { //  Send opponent's marble back to their Home Zone |
 		// Very hard to implement gui wise lesa
+		
+		
+		//destroy();
 	}
 	
 	if(rank==15) { //Move your marble to random empty Safe Zone cell |
@@ -896,61 +983,7 @@ private void moveMarbleToCell() {
     cellOwner[cellIndex] = 0; // Assuming player 0 is the owner
 }
 
-//Example usage: Move player 0's first marble 3 steps
-//moveMarbleBySteps(0, 0, 3);
-public void moveMarbleBySteps(int playerNumber, int marbleIndex, int steps) {
-    // Validate inputs
-    if (playerNumber < 0 || playerNumber >= 4) return;
-    if (marbleIndex < 0 || marbleIndex >= 4) return;
-    Circle marble = playerMarbles[playerNumber].get(marbleIndex);
-    if (marble == null) return;
-
-    // Get current position
-    int currentPosition = marblePositions.getOrDefault(marble, 0);
-
-    // Calculate new position
-    int newPosition = currentPosition + steps;
-    if (newPosition > 100) newPosition = 100;
-    if (newPosition < 0) newPosition = 0;
-
-    // Get target cell
-    Circle targetCell = (Circle) boardStack.lookup("#marble_" + newPosition);
-    if (targetCell == null) return;
-
-    // Get target cell's coordinates using moveMarbleToCell's logic
-    Bounds targetBounds = targetCell.getBoundsInLocal();
-    Point2D targetCenterLocal = new Point2D(
-        targetBounds.getCenterX(),
-        targetBounds.getCenterY()
-    );
-
-    // Convert to scene coordinates
-    Point2D targetCenterScene = targetCell.localToScene(targetCenterLocal);
-
-    // Convert to the marble's parent coordinate system
-    Parent parent = marble.getParent();
-    Point2D targetCenterInParent = parent.sceneToLocal(targetCenterScene);
-
-    // Update position (same as moveMarbleToCell)
-    marble.setLayoutX(targetCenterInParent.getX());
-    marble.setLayoutY(targetCenterInParent.getY());
-    marble.toFront();
-
-    // Update game state
-    if (currentPosition > 0) {
-        cellOccupied[currentPosition] = false;
-        cellOwner[currentPosition] = -1;
-    }
-    if (newPosition > 0) {
-        cellOccupied[newPosition] = true;
-        cellOwner[newPosition] = playerNumber;
-    }
-
-    // Update tracking
-    marblePositions.put(marble, newPosition);
-}
-
-/** Places the card in the firepit */
+/** Places the card in the firepit (For the Player) */
 private void addInFirePit() {
     ImageView[] ivs = { CardPlayer1, CardPlayer2, CardPlayer3, CardPlayer4 };
     ImageView selectedIv = ivs[lastSelectedCard - 1];
@@ -968,6 +1001,7 @@ private void addInFirePit() {
     cardDropPane.getChildren().add(placed);
 }
 
+// (For the Cpu's only) 
 private void addInFirePit(ImageView ivToDrop) {
     ImageView placed = new ImageView(ivToDrop.getImage());
     placed.setPreserveRatio(true);
@@ -1005,6 +1039,60 @@ private void resetPlayButton() {
     playBtn.setManaged(false);
 }
 
+//Example usage: Move player 0's first marble 3 steps
+//moveMarbleBySteps(0, 0, 3);
+public void moveMarbleBySteps(int playerNumber, int marbleIndex, int steps) {
+  // Validate inputs
+  if (playerNumber < 0 || playerNumber >= 4) return;
+  if (marbleIndex < 0 || marbleIndex >= 4) return;
+  Circle marble = playerMarbles[playerNumber].get(marbleIndex);
+  if (marble == null) return;
+
+  // Get current position
+  int currentPosition = marblePositions.getOrDefault(marble, 0);
+
+  // Calculate new position
+  int newPosition = currentPosition + steps;
+  if (newPosition > 100) newPosition = 100;
+  if (newPosition < 0) newPosition = 0;
+
+  // Get target cell
+  Circle targetCell = (Circle) boardStack.lookup("#marble_" + newPosition);
+  if (targetCell == null) return;
+
+  // Get target cell's coordinates using moveMarbleToCell's logic
+  Bounds targetBounds = targetCell.getBoundsInLocal();
+  Point2D targetCenterLocal = new Point2D(
+      targetBounds.getCenterX(),
+      targetBounds.getCenterY()
+  );
+
+  // Convert to scene coordinates
+  Point2D targetCenterScene = targetCell.localToScene(targetCenterLocal);
+
+  // Convert to the marble's parent coordinate system
+  Parent parent = marble.getParent();
+  Point2D targetCenterInParent = parent.sceneToLocal(targetCenterScene);
+
+  // Update position (same as moveMarbleToCell)
+  marble.setLayoutX(targetCenterInParent.getX());
+  marble.setLayoutY(targetCenterInParent.getY());
+  marble.toFront();
+
+  // Update game state
+  if (currentPosition > 0) {
+      cellOccupied[currentPosition] = false;
+      cellOwner[currentPosition] = -1;
+  }
+  if (newPosition > 0) {
+      cellOccupied[newPosition] = true;
+      cellOwner[newPosition] = playerNumber;
+  }
+
+  // Update tracking
+  marblePositions.put(marble, newPosition);
+}
+
 
 // m4 3arf dool b3mlo eh
 
@@ -1020,6 +1108,104 @@ private Marble findModelMarbleForCircle(Circle ui) {
      }
  }
  return null;
+}
+
+private void selectTwoMarbles(MouseEvent a, MouseEvent b) throws InvalidMarbleException {
+    Circle clicked1 = (Circle) a.getSource();
+    Circle clicked2 = (Circle) b .getSource();
+    String fxId1 = clicked1.getId();
+    String fxId2 = clicked2.getId();
+
+    if (!fxId2.startsWith("player0Marble")) {
+    	try {
+            // Extract marble number safely
+    		char playerNum = fxId2.charAt(6);
+    		int playerNumber = (int) playerNum;
+    		
+            char numberPart = fxId2.charAt(13);
+            int marbleNumber = (int) numberPart;
+            int marbleIndex = marbleNumber - 1; // Convert to 0-based index
+
+            // Check if marble is on the board (position > 0)
+            int currentPosition = marblePositions.getOrDefault(clicked2, 0);
+            if (currentPosition == 0) {
+                System.out.println("Marble is at home - cannot select!");
+                return;
+            }
+
+            Player me = game.getPlayers().get(playerNum);
+            List<Marble> marbles = me.getMarbles();
+
+            // Validate index bounds
+            if (marbleIndex < 0 || marbleIndex >= marbles.size()) {
+                System.err.println("Invalid marble index: " + marbleIndex);
+                return;
+            }
+
+            // Toggle selection logic
+            if (clicked2.equals(currentlyHighlighted)) {
+                game.deselectAll();
+                clicked2.setStroke(Color.BLACK);
+                clicked2.setStrokeWidth(1);
+                currentlyHighlighted = null;
+            } else {
+                game.selectMarble(marbles.get(marbleIndex));
+                if (currentlyHighlighted != null) {
+                    currentlyHighlighted.setStroke(Color.BLACK);
+                    currentlyHighlighted.setStrokeWidth(1);
+                }
+                clicked2.setStroke(Color.PINK);  
+                clicked2.setStrokeWidth(4);
+                currentlyHighlighted = clicked2;
+            }
+        } catch (NumberFormatException ex) {
+            System.err.println("Invalid marble ID format: " + fxId2);
+        }
+    }
+
+    try {
+        // Extract marble number safely
+        String numberPart = fxId1.substring("player0Marble".length());
+        int marbleNumber = Integer.parseInt(numberPart);
+        int marbleIndex = marbleNumber - 1; // Convert to 0-based index
+
+        // Check if marble is on the board (position > 0)
+        int currentPosition = marblePositions.getOrDefault(clicked1, 0);
+        if (currentPosition == 0) {
+            System.out.println("Marble is at home - cannot select!");
+            return;
+        }
+
+        Player me = game.getPlayers().get(0);
+        List<Marble> marbles = me.getMarbles();
+
+        // Validate index bounds
+        if (marbleIndex < 0 || marbleIndex >= marbles.size()) {
+            System.err.println("Invalid marble index: " + marbleIndex);
+            return;
+        }
+
+        // Toggle selection logic
+        if (clicked1.equals(currentlyHighlighted)) {
+            game.deselectAll();
+            clicked1.setStroke(Color.BLACK);
+            clicked1.setStrokeWidth(1);
+            currentlyHighlighted = null;
+        } else {
+            game.selectMarble(marbles.get(marbleIndex));
+            if (currentlyHighlighted != null) {
+                currentlyHighlighted.setStroke(Color.BLACK);
+                currentlyHighlighted.setStrokeWidth(1);
+            }
+            clicked1.setStroke(Color.PINK);  // Changed to green for better visibility
+            clicked1.setStrokeWidth(4);
+            currentlyHighlighted = clicked1;
+        }
+    } catch (NumberFormatException ex) {
+        System.err.println("Invalid marble ID format: " + fxId1);
+    }
+    
+    swapCirclePositions(clicked1, clicked2);
 }
 
 /** Swaps two marble-circles both on-screen and in your tracking. */
@@ -1039,5 +1225,59 @@ private void swapCirclePositions(Circle c1, Circle c2) {
  c1.toFront();
  c2.toFront();
 }
+
+private void selectOponentMarble(MouseEvent e) throws InvalidMarbleException, IllegalDestroyException {
+    Circle clicked = (Circle) e.getSource();
+    String fxId = clicked.getId();
+
+    if (!fxId.startsWith("player0Marble")) {
+    	 try {
+    	        // Extract marble number safely
+    		    char playerNum = fxId.charAt(6);
+     		    int playerNumber = (int) playerNum;
+     		    
+    	        char numberPart = fxId.charAt(13);
+    	        int marbleNumber = (int) numberPart;
+    	        int marbleIndex = marbleNumber - 1; // Convert to 0-based index
+
+    	        // Check if marble is on the board (position > 0)
+    	        int currentPosition = marblePositions.getOrDefault(clicked, 0);
+    	        if (currentPosition == 0) {
+    	            System.out.println("Marble is at home - cannot select!");
+    	            return;
+    	        }
+
+    	        Player me = game.getPlayers().get(playerNumber);
+    	        List<Marble> marbles = me.getMarbles();
+
+    	        // Validate index bounds
+    	        if (marbleIndex < 0 || marbleIndex >= marbles.size()) {
+    	            System.err.println("Invalid marble index: " + marbleIndex);
+    	            return;
+    	        }
+
+    	        // Toggle selection logic
+    	        if (clicked.equals(currentlyHighlighted)) {
+    	            game.deselectAll();
+    	            clicked.setStroke(Color.BLACK);
+    	            clicked.setStrokeWidth(1);
+    	            currentlyHighlighted = null;
+    	        } else {
+    	            game.selectMarble(marbles.get(marbleIndex));
+    	            if (currentlyHighlighted != null) {
+    	                currentlyHighlighted.setStroke(Color.BLACK);
+    	                currentlyHighlighted.setStrokeWidth(1);
+    	            }
+    	            clicked.setStroke(Color.PINK);  // Changed to green for better visibility
+    	            clicked.setStrokeWidth(4);
+    	            currentlyHighlighted = clicked;
+    	        }
+    	    } catch (NumberFormatException ex) {
+    	        System.err.println("Invalid marble ID format: " + fxId);
+    	    }
+    }
+
+   destroy(clicked);
 }
 
+}

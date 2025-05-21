@@ -174,12 +174,12 @@
                         <Image url="@../../recources/cards/collection/Untitled%20design%20(8)%20(1).png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="Cpu2Name" text="CPU 2">
+                  <Label fx:id="Cpu2Name" minWidth="200.0" text="CPU 2">
                      <HBox.margin>
                         <Insets left="50.0" top="50.0" />
                      </HBox.margin>
                      <font>
-                        <Font size="36.0" />
+                        <Font size="30.0" />
                      </font>
                   </Label>
                </children>
@@ -188,12 +188,12 @@
          <left>
             <HBox maxHeight="100.0" maxWidth="200.0" prefHeight="100.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="Cpu1Name" minHeight="100.0" minWidth="-Infinity" prefHeight="100.0" prefWidth="100.0" rotate="90.0" text="CPU1">
+                  <Label fx:id="Cpu1Name" minHeight="100.0" minWidth="150.0" prefHeight="100.0" prefWidth="100.0" rotate="90.0" text="CPU1">
                      <font>
-                        <Font size="36.0" />
+                        <Font size="30.0" />
                      </font>
                      <HBox.margin>
-                        <Insets top="30.0" />
+                        <Insets top="70.0" />
                      </HBox.margin>
                   </Label>
                   <ImageView fitHeight="172.0" fitWidth="305.0" rotate="90.0">
@@ -221,9 +221,9 @@
                         <Insets right="-90.0" />
                      </HBox.margin>
                   </ImageView>
-                  <Label fx:id="Cpu3Name" minHeight="100.0" minWidth="100.0" rotate="270.0" text="CPU3">
+                  <Label fx:id="Cpu3Name" minHeight="100.0" minWidth="150.0" rotate="270.0" text="CPU3">
                      <font>
-                        <Font size="36.0" />
+                        <Font size="30.0" />
                      </font>
                      <HBox.margin>
                         <Insets left="-10.0" />
@@ -279,6 +279,7 @@
                      </Label>
                   </children>
                </VBox>
+               <Button mnemonicParsing="false" onMouseClicked="#testBtn" text="test" />
             </HBox>
          </bottom>
       </BorderPane>
